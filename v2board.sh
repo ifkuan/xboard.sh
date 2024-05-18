@@ -1,7 +1,7 @@
 #!/bin/bash
 #
-# v2board.sh
-# https://github.com/9d84/v2board.sh
+# xboard.sh
+# https://github.com/9d84/xboard.sh
 
 # 颜色输出
 echo_content() {
@@ -70,35 +70,35 @@ check_format() {
 }
 
 #检查并安装脚本
-check_v2board_directory() {
-    V2BOARD_DIR="/usr/local/etc/v2board.sh"
-    V2BOARD_SCRIPT="/usr/bin/v2board.sh"
-    REPO_URL="https://github.com/ifkuan/v2board.sh"
+check_xboard_directory() {
+    xboard_DIR="/usr/local/etc/xboard.sh"
+    xboard_SCRIPT="/usr/bin/xboard.sh"
+    REPO_URL="https://github.com/ifkuan/xboard.sh"
 
-    if [[ ! -d "$V2BOARD_DIR" ]]; then
-        echo_content yellow "v2board.sh 目录不存在，正在进行安装..."
-        mkdir -p $V2BOARD_DIR
-        git clone "$REPO_URL" "$V2BOARD_DIR"
-        ln -s "$V2BOARD_DIR/v2board.sh" "$V2BOARD_SCRIPT"
-        echo_content green "快捷方式安装成功！输入 v2board.sh 即可进入脚本。"
+    if [[ ! -d "$xboard_DIR" ]]; then
+        echo_content yellow "xboard.sh 目录不存在，正在进行安装..."
+        mkdir -p $xboard_DIR
+        git clone "$REPO_URL" "$xboard_DIR"
+        ln -s "$xboard_DIR/xboard.sh" "$xboard_SCRIPT"
+        echo_content green "快捷方式安装成功！输入 xboard.sh 即可进入脚本。"
     fi
 }
 
 #防止重复安装
 check_env_file() {
-    ENV_FILE="/usr/local/etc/v2board.sh/www/.env"
+    ENV_FILE="/usr/local/etc/xboard.sh/www/.env"
 
     if [[ -f "$ENV_FILE" ]]; then
-        echo_content yellow "您已安装过v2board"
-        echo_content yellow "如果需要重新安装的，请rm -rf /usr/local/etc/v2board.sh再重装"
-        echo_content yellow "如果需要更新v2board,请在菜单中选择"
+        echo_content yellow "您已安装过xboard"
+        echo_content yellow "如果需要重新安装的，请rm -rf /usr/local/etc/xboard.sh再重装"
+        echo_content yellow "如果需要更新xboard,请在菜单中选择"
         exit 1
     fi
 }
 
 # 初始化设置
 init() {
-    cd $V2BOARD_DIR
+    cd $xboard_DIR
     # 更新 git 子模块和重命名示例文件
     git submodule update --init
     git submodule update --remote
@@ -111,10 +111,10 @@ init() {
     [[ -z $mysql_password ]] && mysql_password=$(openssl rand -base64 12 | tr '/' '_')
 
     # 提示用户输入 mysql 数据库名称
-    mysql_database=$(get_user_input "请输入 mysql 数据库名称（默认为 v2board）:")
+    mysql_database=$(get_user_input "请输入 mysql 数据库名称（默认为 xboard）:")
 
-    # 如果数据库名称为空，则设置为默认名称 v2board
-    [[ -z $mysql_database ]] && mysql_database="v2board"
+    # 如果数据库名称为空，则设置为默认名称 xboard
+    [[ -z $mysql_database ]] && mysql_database="xboard"
 
     # 更新 .env 文件中的 mysql 密码和数据库名称
     sed -i "s/MYSQL_ROOT_PASSWORD =.*/MYSQL_ROOT_PASSWORD = $mysql_password/" .env
@@ -162,7 +162,7 @@ email() {
     sed -i "0,/{/ s/{/{\ntls ${email}/" caddy.conf
 }
 
-# 启动 v2board 相关服务
+# 启动 xboard 相关服务
 launch() {
     docker compose up -d
 
@@ -178,36 +178,36 @@ php composer.phar install'
 数据库密码: $mysql_password
 "
 
-    docker compose exec www php artisan v2board:install
+    docker compose exec www php artisan xboard:install
     # 解决站点提示“队列服务运行异常的问题”
-    cd $V2BOARD_DIR
+    cd $xboard_DIR
     docker compose restart
 
-    echo_content green "配置文件位于$V2BOARD_DIR"
+    echo_content green "配置文件位于$xboard_DIR"
 
 }
 
-# 更新 v2board
-update_v2board() {
-    echo_content sky_blue "正在更新 v2board..."
-    cd $V2BOARD_DIR
-    docker compose exec www bash -c "apk add git && rm -rf ./.git* && git init && git remote add origin https://github.com/wyx2685/v2board.git && bash ./update.sh"    
+# 更新 xboard
+update_xboard() {
+    echo_content sky_blue "正在更新 xboard..."
+    cd $xboard_DIR
+    docker compose exec www bash -c "apk add git && rm -rf ./.git* && git init && git remote add origin https://github.com/cedar2025/xboard.git && bash ./update.sh"    
 }
 
 #更新脚本
 update_script() {
     echo_content sky_blue "正在更新脚本..."
-    wget -O "$V2BOARD_DIR/v2board.sh" "https://raw.githubusercontent.com/ifkuan/v2board.sh/master/v2board.sh"
-    chmod +x "$V2BOARD_SCRIPT"
+    wget -O "$xboard_DIR/xboard.sh" "https://raw.githubusercontent.com/ifkuan/xboard.sh/master/xboard.sh"
+    chmod +x "$xboard_SCRIPT"
     echo_content green "脚本更新完成！"
 }
 
 # 主菜单
 show_menu() {
     echo_content sky_blue "请选择要执行的操作:"
-    echo "[1] 安装 v2board"
+    echo "[1] 安装 xboard"
     echo "[2] 更新脚本"
-    echo "[3] 更新 v2board"
+    echo "[3] 更新 xboard"
     echo "[Q] 退出"
 }
 
@@ -219,7 +219,7 @@ handle_error() {
 main() {
     exit_if_not_root
     check_depend
-    check_v2board_directory
+    check_xboard_directory
 
     while true; do
         show_menu
@@ -239,7 +239,7 @@ main() {
             update_script
             ;;
         3)
-            update_v2board
+            update_xboard
             ;;
         [Qq])
             break
