@@ -1,6 +1,6 @@
-# v2board.sh
+# xboard.sh
 
-改版v2board全自动安装
+xboard全自动安装
 
 ## 用法
  
@@ -15,5 +15,5 @@ dnf install  git curl -y||(apt update -y &&  apt install git curl -y) && bash -c
 2. 使用脚本
 
 ```bash
-sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/ifkuan/v2board/master/v2board.sh)"
+sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/ifkuan/xboard.sh/master/xboard.sh)"
 ```
