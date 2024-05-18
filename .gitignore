@@ -1,0 +1,6 @@
+/mysql
+/.caddy
+debug.sh
+.env
+caddy.conf
+/wwwlogs
