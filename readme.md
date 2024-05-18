@@ -4,9 +4,9 @@ xboard全自动安装
 
 ## 用法
  
- sudo yum install dnf git php
+ sudo yum install dnf git php8.2
  
- sudo apt-get install dnf git php
+ sudo apt-get install dnf git php8.2
  
 sudo yum purge apache2
 
