@@ -4,9 +4,9 @@ xboard全自动安装
 
 ## 用法
  
- yum install dnf git
+ sudo yum install dnf git php
  
- sudo apt-get dnf git
+ sudo apt-get install dnf git php
  
 sudo yum purge apache2
 
