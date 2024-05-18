@@ -19,7 +19,7 @@ services:
     links:
       - mysql
   mysql:
-    image: mysql:8.1
+    image: mysql:5.7.42
     volumes:
       - './mysql:/var/lib/mysql'
     restart: always
